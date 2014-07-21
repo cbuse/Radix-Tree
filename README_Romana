@@ -1,0 +1,86 @@
+Buse Elena-Cristina
+321CA
+
+	Cum am implementat arborele radix?
+
+	Am facut o implementare cu noduri.
+	
+	Fiecare nod contine o cheie, o valoare si o lista de copii.
+	
+	Cheia este ceea ce ati pus in exemplu pe muchiile arborelui,
+iar valoarea este cuvantul introdus, concatenat cu pozitiile sale
+prin caracterul '*'.  Spre exemplu, o valoare va arata astfel:
+cuvant*pozitia_primei_aparatii_a_cuvantului*pozitia_celei_de_a_doua_apritie_a_cuvantului...
+Se observa ca unele noduri nu vor avea valori(tradus in cod, 
+inseamna ca vor avea valoarea "null").
+
+	Initial, cheia este cuvantul pe care il introducem in arbore,
+dar pe parcurs se scurteaza, pe masura ce extrag subsiruri comune din ea.
+	Fiecare camp al nodului are specificatorul de acces "private",
+respectand astfel unul dintre pricipiile POO: incapsularea.
+In consecinta, am implementat getter si setter pentru campuri.
+	
+	Inserarea unui cuvant in arbore se face recursiv.
+	
+	Am observat ca exista 3 cazuri principale:
+	1. numarul de caractere care se potrivesc din cheia care urmeaza sa fie introdusa
+si cheia curenta este mai mic decat lungimea cheii care urmeaza sa fie introdusa
+si egal cu lungimea cheii nodului curent SAU nu exista caractere comune intre
+cheia curenta si cea care urmeaza sa fie introdusa
+ 
+	In acest caz, adaugam un nod nou sau continuam sa inseram recursiv..
+	Implementarea concreta a acestui caz este explicata intr-un javadoc.
+	
+	2.numarul de caractere care se potrivesc din cheia care urmeaza sa fie introdusa
+si cheia curenta este egal cu lungimea cheii care urmeaza sa fie introdusa si cu
+lungimea cheii nodului curent
+	In acest caz, daca nu exista valoare in acel nod o adaug pe cea transmisa ca parametru
+sau concatenez la valoare pozitia din cadrul parametrului.
+	Implementarea concreta a acestui caz este explicata intr-un javadoc.
+	
+	3.numarul de caractere care se potrivesc din cheia care urmeaza sa fie introdusa este
+mai mare ca 0 si mai mic decat lungimea cheii nodului curent
+	In acest caz, adaug unul sau 2 noduri auxiliare.
+	Implementarea concreta a acestui caz este explicata intr-un javadoc.
+		
+	
+	Probleme intampinate: La inceput am incercat sa nu fac recursiv si
+am realizat ca aceste 3 cazuri se ramifica foate mult. De asemenea, nici
+implementarea propusa cu muchii nu mi s-a parut prea usoara.
+
+	Cum am testat codul: am facut o functie de afisare a arborelui(cheia si valoarea)
+pe nivele si imi dadeam seama ce era in neregula(ce cazuri mai trebuie adaugate, copii
+pe care ii las nodului curent care trebuiau mutati mai jos). De asemenea,
+cand au aparut testele,tot stergeam cuvinte din text si vedeam unde nu inserez bine. 
+	Observatie: Imi dau seama ca nu ar fi fost suficient sa las doar pozitiile concatenate
+ca valoare, dar am lasat si cuvantul in fata ca sa imi fie mai usor la debug.
+
+	Aici a fost cea mai mare problema de debug. Odata ce insert-ul a fost bun,
+restul codului nu a mai prezentat probleme majore.
+	
+	La cautare am procedat astfel:
+	Am facut o functie "search" care cauta nodul in care se termina prefixul dat. 
+	Am facut o functie "getPositions" care, cu ajutorul BFS construieste 
+o lista cu valorile copiilor nodului in care se termina prefixul dat. Aceasta functie
+intoarce o lista cu pozitiile decupate din valorile listei anterior construita.
+
+	Probleme intampinate: Am vazut pe forum ca e posibil sa apara si prefixe
+care nu exista. Am reparat cu o variabila "ok" care ia valoarea 0
+atunci cand prefixul nu a fost gasit.
+	
+	Tema contine 4 clase:
+	1. Node - In care am implementat un nod al unui radix tree si
+am facut o functie care intoarce pozitia pana la care doua string-uri sunt identice.
+
+	2. RadixTree - In care am implememtat efectiv functiile necesare temei:
+inserarea unui cuvant in arbore si cautarea unui prefix, precum si afisarera pozitiilor
+cuvintelor care incep cu acelasi prefix in cadrul textului. Detalii in javadoc.
+
+	3.FileParser - intact asa cum l-am luat din scheletul de cod de pe site
+	
+	4.Index - preluat din scheletul de cod de pe site, am adaugat foarte putin.
+Inserez cuvantul din text, apoi caut prefixul.
+	Si aici poate fi obserata incapsularea, intrucat, atat inserarea,
+cat si cautarea indecsilor nu presupune cunoasterea vreunor detalii de implementare,
+ci parametrii lor sunt intuitivi(poate mai putin la "insert", unde trebuie
+concatenat cuvantul cu pozitia).
